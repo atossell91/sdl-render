@@ -65,7 +65,7 @@ void Game::run() {
         p.move();
         p2.move();
         draw();
-        std::this_thread::sleep_for(std::chrono::milliseconds(17));
+        std::this_thread::sleep_for(std::chrono::milliseconds(LOOP_DELAY));
     }
 }
 

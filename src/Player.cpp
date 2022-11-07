@@ -25,8 +25,8 @@ void Player::move() {
     if (inputHandler != NULL) {
         float xAmt = inputHandler->getComponentX();
         float yAmt = inputHandler->getComponentY();
-        gameRectangle.moveX(xAmt*5);
-        gameRectangle.moveY(yAmt*5);
+        gameRectangle.moveX(xAmt*MOVEMENT_SPEED);
+        gameRectangle.moveY(yAmt*MOVEMENT_SPEED);
     }
 }
 

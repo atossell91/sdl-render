@@ -20,6 +20,8 @@ class Game {
     const int SCREEN_WIDTH = 500;
     const int SCREEN_HEIGHT = 500;
 
+    const int LOOP_DELAY = 15;
+
     SDL_Window* window = NULL;
     SDL_Surface* surface = NULL;
     SDL_Renderer* renderer = NULL;

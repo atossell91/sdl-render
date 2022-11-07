@@ -13,6 +13,7 @@ class Player : public IDrawable {
     InputHandler* inputHandler = NULL;
     GameRectangle gameRectangle;
  public:
+    const int MOVEMENT_SPEED = 10;
     Player();
     void setInputHandler(InputHandler* handler);
     void updateInputState();
