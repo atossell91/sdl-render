@@ -2,10 +2,9 @@
 #include "../include/GameRectangle.h"
 
 #include <SDL2/SDL.h>
+#include <iostream>
 
-GameRectangle::GameRectangle(SDL_Window* w) {
-    surface = SDL_GetWindowSurface(w);
-}
+GameRectangle::GameRectangle() {}
 
 GameRectangle::~GameRectangle() {
     if (surface != NULL) {
@@ -29,13 +28,21 @@ void GameRectangle::setY(int y) {
     r.y = y;
 }
 
+void GameRectangle::moveX(int amt) {
+    r.x += amt;
+}
+
+void GameRectangle::moveY(int amt) {
+    r.y += amt;
+}
+
 void GameRectangle::setColour(int r, int g, int b) {
     colour.red = r;
     colour.blue = b;
     colour.green = g;
 }
 
-void GameRectangle::draw(SDL_Surface* s) {
-    SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, colour.red, colour.green, colour.blue));
-    SDL_BlitSurface(s, NULL, surface, NULL);
+void GameRectangle::draw(SDL_Renderer* rend) {
+    SDL_SetRenderDrawColor(rend, 255, 0, 0, 255);
+    SDL_RenderFillRect(rend, &r);
 }

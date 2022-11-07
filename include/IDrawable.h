@@ -7,7 +7,7 @@
 class IDrawable {
  private:
  public:
-    virtual void draw(SDL_Surface* surface) = 0;
+    virtual void draw(SDL_Renderer* renderer) = 0;
 };
 
 #endif  // INCLUDE_IDRAWABLE_H_

@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "IDrawable.h"
+#include "KeyboardInputHandler.h"
 
 class Game {
  private:
