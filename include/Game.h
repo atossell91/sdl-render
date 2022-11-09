@@ -17,8 +17,8 @@ class Game {
     void run();
     void close();
  public:
-    const int SCREEN_WIDTH = 500;
-    const int SCREEN_HEIGHT = 500;
+    const int SCREEN_WIDTH = 800;
+    const int SCREEN_HEIGHT = 800;
 
     const int LOOP_DELAY = 15;
 

@@ -6,14 +6,16 @@
 #include <chrono>
 #include <iostream>
 
-#include "GameRectangle.h"
 #include "KeyboardInputHandler.h"
 #include "Player.h"
 #include "KeyboardDeviceHandler.h"
+#include "JoystickInputHandler.h"
+#include "IForceable.h"
+#include "ConstantForce.h"
 
 void Game::init() {
     //  Initialize SDL
-    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK);
 
     //  Create the window
     window = SDL_CreateWindow("Renderer", SDL_WINDOWPOS_UNDEFINED,
@@ -40,16 +42,22 @@ void Game::run() {
     KeyboardDeviceHandler driver;
     KeyboardInputHandler handler(&driver, SDL_SCANCODE_W, SDL_SCANCODE_S,
     SDL_SCANCODE_A, SDL_SCANCODE_D);
+
+    JoystickInputHandler joystickInput;
     Player p;
     drawables.push_back(&p);
-    p.setInputHandler(&handler);
+    p.setInputHandler(&joystickInput);
     
     KeyboardInputHandler handler2(&driver, SDL_SCANCODE_UP, SDL_SCANCODE_DOWN,
     SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT);
     Player p2;
     drawables.push_back(&p2);
     p2.setInputHandler(&handler2);
+    ConstantForce gravity(ConstantForce::CONST_FORCE_NONE,
+    ConstantForce::CONST_FORCE_GRAVITY);
+    p2.addForce(&gravity);
     
+
     int amt = 5;
     bool quit = false;
     SDL_Event e;
@@ -60,10 +68,8 @@ void Game::run() {
             }
         }
         driver.UpdateState();
-        p.updateInputState();
-        p2.updateInputState();
-        p.move();
-        p2.move();
+        p.update();
+        p2.update();
         draw();
         std::this_thread::sleep_for(std::chrono::milliseconds(LOOP_DELAY));
     }
