@@ -55,7 +55,7 @@ void Game::run() {
     p2.setInputHandler(&handler2);
     ConstantForce gravity(ConstantForce::CONST_FORCE_NONE,
     ConstantForce::CONST_FORCE_GRAVITY);
-    p2.addForce(&gravity);
+    //p2.addForce(&gravity);
     
 
     int amt = 5;

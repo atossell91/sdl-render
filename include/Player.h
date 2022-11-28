@@ -43,3 +43,20 @@ class Player : public IDrawable, public IUpdateable, public IAccelerateable {
 };
 
 #endif  // INCLUDE_PLAYER_H_
+
+/*
+sruct dimension
+   int loc
+   int size
+
+int maxDim = 3
+dimension dims[maxdim]
+
+bool inRange(val, lower, upper)
+   lower <= val <= upper
+
+bool isInside(dimension)
+   for (dimension d : dims) {
+      inRange(d.loc, )
+   }
+*/
