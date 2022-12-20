@@ -2,6 +2,7 @@
 #include "../include/Player.h"
 
 #include <SDL2/SDL.h>
+#include <memory>
 
 Player::Player() {
     r.x = 0;
@@ -10,7 +11,7 @@ Player::Player() {
     r.h = 100;
 }
 
-void Player::addForce(IForceable* force) {
+void Player::addForce(std::shared_ptr<IForceable> force) {
     forces.push_back(force);
 }
 
@@ -20,7 +21,7 @@ void Player::applyForces() {
     }
 }
 
-void Player::setInputHandler(InputHandler* handler) {
+void Player::setInputHandler(std::shared_ptr<InputHandler> handler) {
     if (handler == NULL) return;
     inputHandler = handler;
 }

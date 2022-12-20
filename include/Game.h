@@ -7,13 +7,18 @@
 
 #include "IDrawable.h"
 #include "KeyboardInputHandler.h"
+#include "SDL_Deleters.h"
 
 class Game {
  private:
     std::vector<IDrawable*> drawables;
 
     void init();
+
+    void input();
+    void update();
     void draw();
+    
     void run();
     void close();
  public:
@@ -22,9 +27,8 @@ class Game {
 
     const int LOOP_DELAY = 15;
 
-    SDL_Window* window = NULL;
-    SDL_Surface* surface = NULL;
-    SDL_Renderer* renderer = NULL;
+    std::unique_ptr<SDL_Window, SDL_Window_Deleter> window = NULL;
+    std::unique_ptr<SDL_Renderer, SDL_Renderer_Deleter> renderer = NULL;
 
     void start();
 };

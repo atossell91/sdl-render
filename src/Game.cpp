@@ -12,47 +12,62 @@
 #include "JoystickInputHandler.h"
 #include "IForceable.h"
 #include "ConstantForce.h"
+#include "SDL_Deleters.h"
 
 void Game::init() {
     //  Initialize SDL
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK);
 
     //  Create the window
-    window = SDL_CreateWindow("Renderer", SDL_WINDOWPOS_UNDEFINED,
-    SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    window = std::unique_ptr<SDL_Window, SDL_Window_Deleter>
+    (SDL_CreateWindow("Renderer", SDL_WINDOWPOS_UNDEFINED,
+    SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN));
 
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    renderer = std::unique_ptr<SDL_Renderer, SDL_Renderer_Deleter>
+    (SDL_CreateRenderer(window.get(), -1, SDL_RENDERER_ACCELERATED));
 
     //  Create a surface from the window
     //surface = SDL_GetWindowSurface(window);
 }
 
+void Game::input() {
+
+}
+
+void Game::update() {
+
+}
+
 void Game::draw() {
+    SDL_Renderer* rend_rptr = renderer.get();
     //SDL_FillRect(surface, NULL, SDL_MapRGB(surface->format, 125, 125, 125));
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderClear(renderer);
+    SDL_SetRenderDrawColor(rend_rptr, 255, 255, 255, 255);
+    SDL_RenderClear(rend_rptr);
     for (auto d : drawables) {
-        d->draw(renderer);
+        d->draw(rend_rptr);
     }
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(rend_rptr);
     //SDL_UpdateWindowSurface(window);
 }
 
 void Game::run() {
+    //  Not sure how I feel about this
+    //  Make it a pointer (for consistency) and move it somewhere else
     KeyboardDeviceHandler driver;
+
     KeyboardInputHandler handler(&driver, SDL_SCANCODE_W, SDL_SCANCODE_S,
     SDL_SCANCODE_A, SDL_SCANCODE_D);
 
-    JoystickInputHandler joystickInput;
+    auto joystickInput = std::make_shared<JoystickInputHandler>();
     Player p;
     drawables.push_back(&p);
-    p.setInputHandler(&joystickInput);
+    p.setInputHandler(joystickInput);
     
-    KeyboardInputHandler handler2(&driver, SDL_SCANCODE_UP, SDL_SCANCODE_DOWN,
-    SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT);
-    Player p2;
-    drawables.push_back(&p2);
-    p2.setInputHandler(&handler2);
+    auto handler2 = std::make_shared<KeyboardInputHandler>(&driver,
+    SDL_SCANCODE_UP, SDL_SCANCODE_DOWN, SDL_SCANCODE_LEFT, SDL_SCANCODE_RIGHT);
+    Player* p2 = new Player();
+    drawables.push_back(p2);
+    p2->setInputHandler(handler2);
     ConstantForce gravity(ConstantForce::CONST_FORCE_NONE,
     ConstantForce::CONST_FORCE_GRAVITY);
     //p2.addForce(&gravity);
@@ -69,14 +84,13 @@ void Game::run() {
         }
         driver.UpdateState();
         p.update();
-        p2.update();
+        p2->update();
         draw();
         std::this_thread::sleep_for(std::chrono::milliseconds(LOOP_DELAY));
     }
 }
 
 void Game::close() {
-    SDL_DestroyWindow(window);
     SDL_Quit();
 }
 

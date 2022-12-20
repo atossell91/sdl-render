@@ -4,26 +4,30 @@
 
 #include <SDL2/SDL.h>
 #include <vector>
+#include <memory>
 
 #include "IDrawable.h"
 #include "KeyboardInputHandler.h"
 #include "IUpdateable.h"
 #include "IAccelerateable.h"
 #include "IForceable.h"
+#include "ICollidable.h"
 
 class Player : public IDrawable, public IUpdateable, public IAccelerateable {
  private:
     SDL_Rect r;
-    InputHandler* inputHandler = NULL;
+    std::shared_ptr<InputHandler> inputHandler = NULL;
     float speedX = 0.0;
     float speedY = 0.0;
-   std::vector<IForceable*> forces;
+   std::vector<std::shared_ptr<IForceable>> forces;
+   std::vector<std::shared_ptr<ICollidable>> colliders;
+
  public:
     const int MOVEMENT_SPEED = 10;
     Player();
     
     //  Input oject?
-    void setInputHandler(InputHandler* handler);
+    void setInputHandler(std::shared_ptr<InputHandler> handler);
     void updateInputState();
     
     //  Mover object?
@@ -33,7 +37,7 @@ class Player : public IDrawable, public IUpdateable, public IAccelerateable {
     //  Single and multiple force objects
     //  Also, should addforce and apply forces have their own interface?
     //  Should they use the IAcceleratable interface, or a different one?
-    void addForce(IForceable* force);
+    void addForce(std::shared_ptr<IForceable> force);
     void applyForces();
     void modifySpeedX(float spd);
     void modifySpeedY(float spd);

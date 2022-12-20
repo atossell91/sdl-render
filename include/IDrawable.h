@@ -3,6 +3,7 @@
 #define INCLUDE_IDRAWABLE_H_
 
 #include <SDL2/SDL.h>
+#include <memory>
 
 class IDrawable {
  private:
